@@ -23,7 +23,7 @@ make build
 ## Génération des Fixtures
 
 ```bash
-cd hackaton-m2
+cd todo-nest
 
 make seed
 ```              
