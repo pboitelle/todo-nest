@@ -11,6 +11,8 @@ import { AuthenticationController } from './authentication/authentication.contro
 import { AuthenticationService } from './authentication/authentication.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { SeedService } from './seed/seed.service';
+import { ListesModule } from './listes/listes.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { SeedService } from './seed/seed.service';
     TypeOrmCustomModule.register(),
     TypeOrmModule.forFeature([User]),
     UsersModule,
+    ListesModule,
+    TasksModule,
     AuthenticationModule
   ],
   controllers: [AuthenticationController],
