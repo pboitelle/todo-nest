@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as compression from 'compression';
+import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,10 @@ async function bootstrap() {
   app.enableCors();
 
   app.use(compression());
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
 
   app.enableCors({
     allowedHeaders: ['content-type'],
