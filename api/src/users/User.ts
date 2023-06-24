@@ -6,10 +6,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Liste } from '../listes/Liste';
 
 @Entity()
 export class User {
@@ -44,4 +47,7 @@ export class User {
 
   @UpdateDateColumn()
   updatedDate: Date;
+
+  @OneToMany(() => Liste, (Liste) => Liste.user)
+  listes: Liste[];
 }

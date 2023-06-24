@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './User';
+import { Liste } from '../listes/Liste';
+import { Task } from '../tasks/Task';
 import { Repository } from 'typeorm';
 import {
   CreateUserRequest,
@@ -23,8 +25,13 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(Liste)
+    private readonly ListesRepository: Repository<Liste>,
+    @InjectRepository(Task)
+    private readonly tasksRepository: Repository<Task>,
     private readonly jwtService: JwtService
   ) {}
+
 
 
   async getMe(access_token: string): Promise<User> {
@@ -40,6 +47,8 @@ export class UsersService {
   }
 
 
+
+  // Permet de modifier l'email profil de l'utilisateur
   async updateProfile(
     access_token: string,
     updateProfileRequest: UpdateProfileRequest,
@@ -54,6 +63,8 @@ export class UsersService {
   }
 
 
+
+  // Permet de modifier le mot de passe de l'utilisateur
   async updatePassword(
     access_token: string,
     updatePasswordRequest: UpdatePasswordRequest,
@@ -69,6 +80,8 @@ export class UsersService {
   }
 
 
+
+  // PErmet de créer un utilisateur
   async createUser(createUserRequest: CreateUserRequest): Promise<any> {
     try {
       return await this.usersRepository.save(createUserRequest);
@@ -78,16 +91,35 @@ export class UsersService {
   }
 
 
+  
+  // Retourne tous les utilisateurs
   public getUsers(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
 
+
+  // REtourne les listes d'un utilisateur et ses tâches
+  async findUserListes(uuid: string) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: uuid,
+      },
+      relations: ['listes', 'listes.tasks'],
+    });
+    return user;
+  }
+
+
+
+  // Retourne l'utilisateur par son email
   public getUserByEmail(email: string): Promise<User> {
     return this.usersRepository.findOneBy({ email });
   }
 
 
+
+  // Retourne l'utilisateur par son id
   async getUserById(uuid: string): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id: uuid });
     if (!user) {
@@ -98,6 +130,8 @@ export class UsersService {
   }
 
 
+
+  // Permet de mettre à jour un utilisateur
   async update(
     uuid: string,
     updateUserRequest: UpdateUserRequest,
@@ -118,6 +152,9 @@ export class UsersService {
     }
   }
 
+
+
+  // Permet de supprimer un utilisateur
   async delete(uuid: string): Promise<any> {
     const user = await this.usersRepository.findOneBy({ id: uuid });
     if (!user) {
@@ -127,11 +164,15 @@ export class UsersService {
     await this.usersRepository.remove(user);
   }
 
+
+
+  // Permet de generer des utilisateurs
   public async seed() {
     const userPassword = await hash(process.env.USER_PASSWORD, 10);
     const administratorPassword = await hash(process.env.ADMIN_PASSWORD, 10);
 
-
+    await this.tasksRepository.delete({});
+    await this.ListesRepository.delete({});
     await this.usersRepository.delete({});
 
 
@@ -153,5 +194,15 @@ export class UsersService {
       password: userPassword
     });
     await this.usersRepository.save(user);
+
+
+    const user2 = this.usersRepository.create({
+      role: Role.USER,
+      email: 'user2@user2.com',
+      firstname: 'Ulysse',
+      lastname: 'MF',
+      password: userPassword
+    });
+    await this.usersRepository.save(user2);
   }
 }
