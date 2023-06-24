@@ -34,6 +34,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
 
+
   @Get('me')
   @AuthenticationRequired()
   getMe(@Headers() headers: any) {
@@ -47,6 +48,7 @@ export class UsersController {
   }
 
 
+
   @Patch('/updateemail')
   @AuthenticationRequired()
   updateProfile(
@@ -58,6 +60,7 @@ export class UsersController {
 
     return this.usersService.updateProfile(access_token, updateProfileRequest);
   }
+
 
 
   @Patch('/updatepassword')
@@ -75,6 +78,8 @@ export class UsersController {
     );
   }
 
+
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createUser(
@@ -82,6 +87,7 @@ export class UsersController {
   ): Promise<User> {
     return await this.usersService.createUser(createUserRequest);
   }
+
 
 
   @AuthenticationRequired()
@@ -92,12 +98,25 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+
+
+  @Get(':uuid/listes')
+  @HttpCode(HttpStatus.OK)
+  async findUserListes(
+    @Param('uuid', ParseUUIDPipe) uuid: string,
+  ): Promise<User> {
+    return this.usersService.findUserListes(uuid);
+  }
+
+
+
   @Get(':uuid')
   @AuthenticationRequired()
   @HttpCode(HttpStatus.OK)
   async findById(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<User> {
     return this.usersService.getUserById(uuid);
   }
+
 
 
   @Patch(':uuid')
@@ -111,6 +130,7 @@ export class UsersController {
     return await this.usersService.update(uuid, updateUserRequest);
   }
   
+
 
   @Delete(':uuid')
   @AuthenticationRequired()

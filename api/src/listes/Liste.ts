@@ -1,6 +1,8 @@
-import { IsDate, IsDecimal, IsString } from 'class-validator';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsString } from 'class-validator';
+import { Column, Entity, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../users/User';
+
+import { Task } from '../tasks/Task';
 
 
 @Entity()
@@ -18,4 +20,7 @@ export class Liste {
 
     @ManyToOne(() => User, {nullable: true} )
     user: User;
+
+    @OneToMany(() => Task, (Task) => Task.liste)
+    tasks: Task[];
 }

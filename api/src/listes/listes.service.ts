@@ -39,7 +39,7 @@ import { User } from '../users/User';
     async getListes(): Promise<Liste[]> {
       const Listes = await this.ListesRepository.find({
         relations: {
-          user: true
+          user: true,
         },
       });
       return Listes;
