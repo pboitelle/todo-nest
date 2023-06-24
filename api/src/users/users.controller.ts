@@ -28,8 +28,10 @@ import {
 } from '../authentication/authentication.decorator';
 import { Role } from '../authentication/authentication.enum';
 import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Utilisateurs')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

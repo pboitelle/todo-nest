@@ -25,8 +25,10 @@ import {
   } from '../authentication/authentication.decorator';
   import { Role } from '../authentication/authentication.enum';
   import { Request } from 'express';
+  import { ApiTags } from '@nestjs/swagger';
   
   @Controller('listes')
+  @ApiTags('Listes')
   export class ListesController {
     constructor(private readonly listesService: listesService) {}
   

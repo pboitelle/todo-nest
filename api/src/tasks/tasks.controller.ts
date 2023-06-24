@@ -28,8 +28,10 @@ import {
   } from '../authentication/authentication.decorator';
   import { Role } from '../authentication/authentication.enum';
   import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
   
   @Controller('tasks')
+  @ApiTags('Tasks')
   export class TasksController {
     constructor(private readonly tasksService: tasksService) {}
   
