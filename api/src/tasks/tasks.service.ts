@@ -10,6 +10,7 @@ import {
   import {
     CreateTaskRequest,
     UpdateTaskRequest,
+    UpdateStatutRequest
   } from './dto/tasks.request';
 import { Liste } from '../listes/Liste';
   
@@ -54,6 +55,21 @@ import { Liste } from '../listes/Liste';
       }
   
       return Task;
+    }
+
+
+
+    // Permet de modifier l'etat du type de la tache
+    async updateStatutTask(
+      updateStatutRequest: UpdateStatutRequest,
+      taskId: string,
+    ): Promise<any> {
+
+      await this.tasksRepository.update(taskId, {
+        statut: updateStatutRequest.statut,
+      });
+
+      return { message: 'Task updated successfully' };
     }
 
   

@@ -12,12 +12,15 @@ import {
     ValidationPipe,
     Req,
     BadRequestException,
+    NotFoundException,
+    Headers,
   } from '@nestjs/common';
   import { Task } from './Task';
   import { tasksService } from './tasks.service';
   import {
     CreateTaskRequest,
     UpdateTaskRequest,
+    UpdateStatutRequest
   } from './dto/tasks.request';
   import {
     AuthenticationRequired,
@@ -61,6 +64,20 @@ import {
       @Param('uuid', ParseUUIDPipe) uuid: string,
     ): Promise<Task> {
       return this.tasksService.getTaskById(uuid);
+    }
+
+
+
+    @Patch(':uuid/update_statut')
+    @AuthenticationRequired()
+    updateProfile(
+      @Req() req: Request,
+      @Body(ValidationPipe) updateStatutRequest: UpdateStatutRequest,
+      @Param('uuid', ParseUUIDPipe) uuid: string,
+      @Headers() headers: any,
+    ) {
+
+      return this.tasksService.updateStatutTask(updateStatutRequest, uuid);
     }
   
 
