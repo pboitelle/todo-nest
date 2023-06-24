@@ -13,6 +13,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { SeedService } from './seed/seed.service';
 import { ListesModule } from './listes/listes.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -26,6 +27,10 @@ import { TasksModule } from './tasks/tasks.module';
         POSTGRES_PORT: Joi.number().required(),
       }),
       envFilePath: './.env',
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
     }),
     TypeOrmCustomModule.register(),
     TypeOrmModule.forFeature([User]),
